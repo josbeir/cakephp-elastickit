@@ -46,7 +46,7 @@ Use the original plugin for ORM-style features. Use ElasticKit for clean access 
 Install the dependencies in your Cake app:
 
 ```bash
-composer require josbeir/cakephp-elastikit
+composer require josbeir/cakephp-elastickit
 ```
 
 Ensure the plugin is loaded (one of):
