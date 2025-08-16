@@ -6,7 +6,7 @@ namespace ElasticKit\Test;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Http\TestSuite\HttpClientTrait;
 use Cake\TestSuite\TestCase;
-use Dom\Document;
+use ElasticKit\Document;
 use ElasticKit\ResultSet;
 use ElasticKit\Test\Trait\ElasticClientTrait;
 use ElasticKit\TestApp\Model\Index\TestItemsIndex;
@@ -53,7 +53,7 @@ class ResultSetTest extends TestCase
         $this->assertEmpty($resultset->getAggregations());
 
         $first = $resultset->first();
-        $this->assertNotInstanceOf(Document::class, $first);
+        $this->assertInstanceOf(Document::class, $first);
         $this->assertEquals('hello', $first->name);
         $this->assertEquals(1, $first->score);
         $this->assertEquals(1, $first->id);
@@ -75,7 +75,7 @@ class ResultSetTest extends TestCase
         $this->assertEquals(1, $resultset->count());
 
         $first = $resultset->first();
-        $this->assertNotInstanceOf(Document::class, $first);
+        $this->assertInstanceOf(Document::class, $first);
         $this->assertEquals('Test Item', $first->name);
         $this->assertEquals(1, $first->id);
     }
@@ -96,7 +96,7 @@ class ResultSetTest extends TestCase
         $this->assertArrayHasKey('some_id', $aggregations);
     }
 
-    public function testGetResponse()
+    public function testGetResponse(): void
     {
         $response = $this->createElasticResponse('_search.json');
         $this->mockClientGet(self::ES_HOST . '/test_items/_search', $response);

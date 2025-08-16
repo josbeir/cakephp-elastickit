@@ -14,7 +14,7 @@ trait ElasticClientTrait
 {
     use HttpClientTrait;
 
-    protected const string ES_HOST = 'http://localhost:9200';
+    protected const ES_HOST = 'http://localhost:9200';
 
     /**
      * Initialize the Elasticsearch client and connection.

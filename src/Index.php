@@ -168,7 +168,7 @@ class Index
     {
         if ($this->indexName === null) {
             $index = namespaceSplit(static::class);
-            $index = substr((string)end($index), 0, -5);
+            $index = substr(end($index), 0, -5);
             if ($index === '' || $index === '0') {
                 throw new CakeException(
                     'You must specify either the `alias` or the `index` option for the constructor.',

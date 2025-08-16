@@ -181,8 +181,6 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
 
     /**
      * Get the original Elasticsearch response.
-     *
-     * @return \Elastic\Elasticsearch\Response\Elasticsearch
      */
     public function getResponse(): Elasticsearch
     {
