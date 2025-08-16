@@ -1,7 +1,0 @@
-{
-    "phpCodeSniffer.standard": "Automatic",
-    "[php]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "obliviousharmony.vscode-php-codesniffer"
-    }
-}

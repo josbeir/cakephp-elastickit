@@ -108,12 +108,12 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
 
         // For normal search responses.
         if (!empty($row->_source)) {
-            $data['id'] = $row->_id;
+            $data['id'] = $row->_id ?? null;
             $data['score'] = $row->_score ?? null;
             $data += (array)$row->_source;
         // For batch responses.
         } elseif ($row?->index) {
-            $data['id'] = $row->index->_id;
+            $data['id'] = $row->index->_id ?? null;
 
             if (!empty($row->index->error)) {
                 $errors = $this->objectToArray($row->index->error);
