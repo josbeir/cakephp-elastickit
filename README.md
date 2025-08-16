@@ -1,4 +1,4 @@
-# ElasticKit
+# ElasticKit - a CakePHP Elasticsearch plugin 
 [![CI](https://github.com/josbeir/cakephp-elastikit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/josbeir/cakephp-elastikit/actions/workflows/ci.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat)](https://phpstan.org/)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-8892BF.svg)](https://php.net/)
@@ -35,8 +35,10 @@ Use the original plugin for ORM-style features. Use ElasticKit for clean access 
 ## Requirements
 
 - PHP >= 8.2
-- CakePHP 5.x
-- Elasticsearch 8/9-compatible cluster
+- CakePHP >= 5.2
+- Elasticsearch >= 8.5 / 9.x
+
+> **Note**: Lock the `elasticsearch/elasticsearch` package version in your composer file to match your Elasticsearch server version for optimal compatibility:
 
 ## Installation
 
@@ -72,6 +74,7 @@ ConnectionManager::setConfig('elasticsearch', [
 	],
 	// Optional: any PSR-3 logger name registered with Cake\Log\Log or a LoggerInterface instance
 	'logger' => 'elasticsearch',
+
     // All extra arguments are passed to \Elasticsearch\ClientBuilder
 ]);
 ```
@@ -80,19 +83,19 @@ By default, indices resolve to the `elasticsearch` connection name. You can over
 
 ## Defining an Index
 
-Create an index class in `src/Model/Index`, e.g. `TestItemsIndex`:
+Create an index class in `src/Model/Index`, e.g. `ArticlesIndex`:
 
 ```php
 namespace App\Model\Index;
 
 use ElasticKit\Index;
 
-class TestItemsIndex extends Index
+class ArticlesIndex extends Index
 {
 	public function initialize(): void
 	{
 		// Optional: set index alias/name explicitly; otherwise class name is underscored
-		// $this->setIndexName('test_items');
+		// $this->setIndexName('articles');
 
 		// Optional: provide settings/mappings used by createIndex()/updateIndex()
 		$this->setSettings([
@@ -119,7 +122,7 @@ use ElasticKit\Document;
 
 class Article extends Document
 {
-	// Add accessors/mutators/virtuals as you like. You own persistence.
+	// Add accessors/mutators/virtuals as you like.
 }
 ```
 
@@ -127,26 +130,22 @@ class Article extends Document
 
 You can query in two ergonomic ways.
 
-### 1) With Spatie’s query builder
+### 1) With [Spatie’s](https://github.com/spatie/elasticsearch-query-builder) query builder
 
 The `Index::find()` method creates a `Spatie\ElasticsearchQueryBuilder\Builder`, sets the index, executes the search, and returns a `ResultSet` that yields `Document` instances.
 
 ```php
 use Spatie\ElasticsearchQueryBuilder\Builder;
+use Spatie\ElasticsearchQueryBuilder\Aggregations\MaxAggregation;
+use Spatie\ElasticsearchQueryBuilder\Queries\MatchQuery;
 
-// From a controller/service using IndexLocatorAwareTrait
-/** @var \App\Model\Index\TestItemsIndex $TestItems */
-$TestItems = $this->fetchIndex('TestItems');
+$Articles = $this->fetchIndex('Articles');
 
-$results = $TestItems->find(function (Builder $builder) {
-	return $builder->size(25)
-	  ->sort('_score', 'desc');
+$results = $Articles->find(function (Builder $builder) {
+	return $builder
+		->addQuery(MatchQuery::create('name', 'elastickit', fuzziness: 3))
+		->addAggregation(MaxAggregation::create('score'))
 });
-
-foreach ($results as $doc) {
-	// $doc is an instance of your Document class (or the base one)
-	// $doc->id, $doc->score, and _source fields are accessible as properties
-}
 ```
 
 ### 2) Directly via the official client
@@ -154,16 +153,16 @@ Every unknown method call on your index instance proxies to the underlying `Elas
 
 ```php
 // Index's get() - returns a Document|null
-$doc = $TestItems->get('document_id');
+$doc = $Articles->get('document_id');
 
 // Client's get() - returns raw Elasticsearch response
-$response = $TestItems->getClient()->get([
-	'index' => $TestItems->getIndexName(),
+$response = $Articles->getClient()->get([
+	'index' => $Articles->getIndexName(),
 	'id' => 'document_id'
 ]);
 
-$response = $TestItems->search([
-	'index' => $TestItems->getIndexName(),
+$response = $Articles->search([
+	'index' => $Articles->getIndexName(),
 	'body' => [
 		'query' => ['match_all' => ...],
 		'size' => 10,
@@ -171,7 +170,7 @@ $response = $TestItems->search([
 ]);
 
 // Convert as needed
-$resultset = $TestItems->resultSet($response);
+$resultset = $Articles->resultSet($response);
 $array = $response->asArray();
 $object = $response->asObject();
 $ok = $response->asBool();
@@ -195,6 +194,7 @@ The `ResultSet` exposes helpers like:
 - `getMaxScore(): ?float` — Max score for hits (if present).
 - `getShards(): ?array` — Shard info from the response (if present).
 - `getHitsTotal(): ?int` — Reported total hits value (may be `null` depending on ES settings like `track_total_hits`).
+- `getAggregations(): ?array` — Aggregation results from the response (if present).
 - `hasErrors(): bool` — Indicates whether the underlying response reported errors (useful for bulk responses).
 - `getResponse(): ResponseInterface` — Access the raw Elasticsearch response object.
 
@@ -209,9 +209,9 @@ foreach ($results as $doc) {
 Force a specific document class
 
 ```php
-use App\Model\Document\TestItem;
+use App\Model\Document\Article;
 
-$results->setDocumentClass(TestItem::class);
+$results->setDocumentClass(Article::class);
 ```
 
 Note: ResultSet also includes common collection utilities via Cake’s CollectionTrait (e.g., `map()`, `filter()`, `toList()`), which can be handy for quick transformations.
@@ -221,12 +221,12 @@ Note: ResultSet also includes common collection utilities via Cake’s Collectio
 The plugin ships a small command to create/update/delete indices based on your index class config (`settings`/`mappings`).
 
 ```bash
-bin/cake elasticsearch index test_items --create  # create if missing
-bin/cake elasticsearch index test_items --update  # put mapping
-bin/cake elasticsearch index test_items --delete  # delete index
+bin/cake elasticsearch index articles --create  # create if missing
+bin/cake elasticsearch index articles --update  # put mapping
+bin/cake elasticsearch index articles --delete  # delete index
 
 # Use a plugin or FQCN-style name if needed
-bin/cake elasticsearch index App.TestItems --create
+bin/cake elasticsearch index App.Articles --create
 ```
 
 Use `-v` to print current settings/mappings of the target index.
@@ -238,15 +238,15 @@ Use the `IndexLocatorAwareTrait` to fetch indices by alias (class name without t
 ```php
 use ElasticKit\Locator\IndexLocatorAwareTrait;
 
-class TestItemsService
+class ArticlesService
 {
 	use IndexLocatorAwareTrait;
 
 	public function searchByTitle(string $q)
 	{
-		$TestItems = $this->fetchIndex('TestItems');
+		$Articles = $this->fetchIndex('Articles');
 
-		return $TestItems->get(1234);
+		return $Articles->get(1234);
 	}
 }
 ```
