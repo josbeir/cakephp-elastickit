@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  PHP_EXTENSIONS: intl pdo_sqlite pcov
+  PHP_EXTENSIONS: intl, pdo_sqlite
 
 jobs:
   test:
@@ -20,11 +20,14 @@ jobs:
           - php-version: '8.2'
             prefer-lowest: 'prefer-lowest'
 
-    container:
-      image: thecodingmachine/php:${{ matrix.php-version }}-v5-cli
-      options: --user root
-
     steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          coverage: pcov
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -61,13 +64,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'pull_request'
 
-    container:
-      image: thecodingmachine/php:8.4-v5-cli
-      options: --user root
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: ${{ env.PHP_EXTENSIONS }}
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
