@@ -58,7 +58,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: josbeir/cakephp-elastickit
-          files: ./coverage.xml          
 
   static-analysis:
     runs-on: ubuntu-latest

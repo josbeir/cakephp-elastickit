@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace ElasticKit\Test;
 
 use Cake\Datasource\ConnectionManager;
+use Cake\Log\Engine\FileLog;
+use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
 use Elastic\Elasticsearch\ClientInterface;
 use ElasticKit\Datasource\Connection;
@@ -45,6 +47,14 @@ class ConnectionTest extends TestCase
         $this->assertInstanceOf(CacheInterface::class, $cacher);
     }
 
+    public function testSetCacher(): void
+    {
+        $connection = ConnectionManager::get('test_elasticsearch');
+        $cacher = $this->createMock(CacheInterface::class);
+        $connection->setCacher($cacher);
+        $this->assertSame($cacher, $connection->getCacher());
+    }
+
     public function testConfigName(): void
     {
         $connection = ConnectionManager::get('test_elasticsearch');
@@ -78,5 +88,28 @@ class ConnectionTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $connection->setLogger($logger);
         $this->assertSame($logger, $connection->getLogger());
+
+        Log::setConfig('custom_elasticsearch', [
+            'className' => FileLog::class,
+            'path' => LOGS,
+            'levels' => ['info'],
+            'file' => 'info',
+        ]);
+
+        $connection->setLogger(null);
+        $connection->setConfig('logger', 'custom_elasticsearch');
+        $this->assertInstanceOf(FileLog::class, $connection->getLogger());
+        Log::drop('custom_elasticsearch');
+
+        Log::setConfig('custom2_elasticsearch', [
+            'className' => FileLog::class,
+            'path' => LOGS,
+            'levels' => ['info'],
+            'file' => 'info',
+        ]);
+        $connection->setLogger(null);
+        $connection->setConfig('logger', Log::engine('custom2_elasticsearch'));
+        $this->assertInstanceOf(FileLog::class, $connection->getLogger());
+        Log::drop('custom2_elasticsearch');
     }
 }

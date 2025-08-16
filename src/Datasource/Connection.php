@@ -163,7 +163,7 @@ class Connection implements ConnectionInterface
      *
      * @param \Psr\Log\LoggerInterface $logger The logger instance to set.
      */
-    public function setLogger(LoggerInterface $logger): self
+    public function setLogger(?LoggerInterface $logger): self
     {
         $this->logger = $logger;
 
