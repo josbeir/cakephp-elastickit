@@ -1,0 +1,39 @@
+{
+    "errors": true,
+    "took": 0,
+    "items": [
+        {
+            "index": {
+                "_index": "feed_items",
+                "_id": "1",
+                "status": 400,
+                "error": [
+                    {
+                        "type": "document_parsing_exception",
+                        "reason": "Error reason",
+                        "caused_by": {
+                            "type": "number_format_exception",
+                            "reason": "Error reason"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "index": {
+                "_index": "feed_items",
+                "_id": "2",
+                "_version": 12,
+                "result": "updated",
+                "_shards": {
+                    "total": 2,
+                    "successful": 1,
+                    "failed": 0
+                },
+                "_seq_no": 109547,
+                "_primary_term": 1,
+                "status": 200
+            }
+        }
+    ]
+}

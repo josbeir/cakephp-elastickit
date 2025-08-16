@@ -62,6 +62,15 @@ class IndexLocatorTest extends TestCase
         $locator->get('TestIndex');
     }
 
+    public function testExists()
+    {
+        $locator = new IndexLocator();
+        $instance = new TestItemsIndex();
+        $locator->set('TestIndex', $instance);
+        $this->assertTrue($locator->exists('TestIndex'));
+        $this->assertFalse($locator->exists('NonExistentIndex'));
+    }
+
     public function testRemove(): void
     {
         $locator = new IndexLocator();

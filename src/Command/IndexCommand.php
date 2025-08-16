@@ -61,7 +61,10 @@ class IndexCommand extends Command
     }
 
     /**
-     * Implement this method with your command's logic.
+     * Execute the index management command.
+     *
+     * Handles creation, updating, deletion, and inspection of Elasticsearch indices
+     * based on the provided command options.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io

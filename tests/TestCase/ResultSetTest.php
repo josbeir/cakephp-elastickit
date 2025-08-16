@@ -45,6 +45,7 @@ class ResultSetTest extends TestCase
 
         $this->assertInstanceOf(ResultSetInterface::class, $resultset);
 
+        $this->assertIsArray($resultset->getShards());
         $this->assertEquals(2, $resultset->count());
         $this->assertEquals(1, $resultset->getTook());
         $this->assertEquals(1, $resultset->getMaxScore());
@@ -107,5 +108,46 @@ class ResultSetTest extends TestCase
         $resultset = new ResultSet($esResponse, 'test_items');
 
         $this->assertSame($esResponse, $resultset->getResponse());
+    }
+
+    public function testBulk()
+    {
+        $response = $this->createElasticResponse('_bulk.json');
+        $this->mockClientPost(self::ES_HOST . '/test_items/_bulk', $response);
+
+        $esResponse = $this->Index->bulk([
+            'index' => 'test_items',
+            'body' => [],
+        ]);
+
+        $resultset = new ResultSet($esResponse, 'test_items');
+        $this->assertFalse($resultset->hasErrors());
+        $first = $resultset->first();
+
+        $this->assertInstanceOf(Document::class, $first);
+        $this->assertEquals(1, $first->id);
+    }
+
+    public function testBulkWithErrors()
+    {
+        $response = $this->createElasticResponse('_bulk_errors.json');
+        $this->mockClientPost(self::ES_HOST . '/test_items/_bulk', $response);
+
+        $esResponse = $this->Index->bulk([
+            'index' => 'test_items',
+            'body' => [],
+        ]);
+
+        $resultset = new ResultSet($esResponse, 'test_items');
+        $this->assertTrue($resultset->hasErrors());
+        $first = $resultset->first();
+
+        $this->assertInstanceOf(Document::class, $first);
+        $this->assertEquals(1, $first->id);
+        $this->assertIsArray($first->getErrors());
+
+        $errors = $first->getErrors();
+        $this->assertArrayHasKey('type', $errors[0]);
+        $this->assertEquals('document_parsing_exception', $errors[0]['type']);
     }
 }

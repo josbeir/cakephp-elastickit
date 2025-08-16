@@ -31,7 +31,6 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
         protected string $indexName,
     ) {
         $items = new ArrayIterator($this->getResults());
-
         parent::__construct($items);
     }
 
@@ -56,7 +55,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
      */
     public function getShards(): ?array
     {
-        return $this->response->_shards;
+        return $this->objectToArray($this->response->_shards);
     }
 
     /**
@@ -72,14 +71,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
      */
     public function getAggregations(): array
     {
-        $aggregations = (array)$this->response->aggregations;
-        array_walk_recursive($aggregations, function (&$item): void {
-            if (is_object($item)) {
-                $item = (array)$item;
-            }
-        });
-
-        return $aggregations;
+        return $this->objectToArray($this->response->aggregations);
     }
 
     /**
@@ -115,7 +107,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
         ];
 
         // For normal search responses.
-        if ($row?->_source) {
+        if (!empty($row->_source)) {
             $data['id'] = $row->_id;
             $data['score'] = $row->_score ?? null;
             $data += (array)$row->_source;
@@ -123,8 +115,8 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
         } elseif ($row?->index) {
             $data['id'] = $row->index->_id;
 
-            if ($row->index->error) {
-                $errors[] = $row->index->error;
+            if (!empty($row->index->error)) {
+                $errors = $this->objectToArray($row->index->error);
             }
         }
 
@@ -185,5 +177,43 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
     public function getResponse(): Elasticsearch
     {
         return $this->response;
+    }
+
+    /**
+     * Convert an object to an array.
+     *
+     * @param mixed $data
+     */
+    protected function objectToArray(mixed $data): array
+    {
+        if (is_object($data)) {
+            $data = (array)$data;
+        }
+
+        if (empty($data)) {
+            return [];
+        }
+
+        array_walk_recursive($data, function (&$item): void {
+            if (is_object($item)) {
+                $item = (array)$item;
+            }
+        });
+
+        return $data;
+    }
+
+    /**
+     * Get debug information.
+     *
+     * @return array{indexName: string, documentClass: null|string, response: array}
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'indexName' => $this->indexName,
+            'documentClass' => $this->documentClass,
+            'response' => $this->response->asArray(),
+        ];
     }
 }

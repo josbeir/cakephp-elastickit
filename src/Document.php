@@ -35,10 +35,6 @@ class Document implements EntityInterface
             $this->setSource($options['source']);
         }
 
-        if ($options['markNew'] !== null) {
-            $this->setNew($options['markNew']);
-        }
-
         if ($properties !== []) {
             $this->setOriginalField(array_keys($properties));
 
@@ -53,10 +49,6 @@ class Document implements EntityInterface
                 'setter' => $options['useSetters'],
                 'guard' => $options['guard'],
             ]);
-        }
-
-        if ($options['markClean']) {
-            $this->clean();
         }
     }
 }

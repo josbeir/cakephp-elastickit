@@ -150,6 +150,16 @@ class IndexTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function testUpdateIndex(): void
+    {
+        $response = $this->createElasticResponse()
+            ->withStatus(200);
+        $this->mockClientPut(self::ES_HOST . '/test_items/_mapping', $response);
+
+        $result = $this->Index->updateIndex();
+        $this->assertTrue($result);
+    }
+
     public function testDeleteIndex(): void
     {
         $response = $this->createElasticResponse()
