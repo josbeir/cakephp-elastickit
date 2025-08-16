@@ -2,7 +2,7 @@
 
 A lightweight CakePHP 5 plugin for working with Elasticsearch using the official PHP client.
 
-This plugin intentionally keeps a very small surface area: it wires the official client into CakePHP using ConnectionInterface, provides a simple Index locator, a thin Index base class with a few convenience methods, and a ResultSet that decorates results into Document entities. You own persistence, validation, and your domain logic.
+This plugin provides a minimal integration: official Elasticsearch client wired into CakePHP with basic Index classes, ResultSet decoration, and Document entities. You handle persistence and validation.
 
 Note: This plugin does NOT implement RepositoryInterface, keeping the abstraction minimal and focused.
 
@@ -30,8 +30,8 @@ If you need a full ORM-style persistence layer, the original plugin may suit you
 
 ## Requirements
 
-- PHP >= 8.1
-- CakePHP 5.2.x
+- PHP >= 8.2
+- CakePHP 5.x
 - Elasticsearch 8/9-compatible cluster
 
 ## Installation
@@ -39,7 +39,7 @@ If you need a full ORM-style persistence layer, the original plugin may suit you
 Install the dependencies in your Cake app:
 
 ```bash
-composer require elasticsearch/elasticsearch:^9.0 spatie/elasticsearch-query-builder:^3.8
+composer require josbeir/cakephp-elastikit
 ```
 
 Ensure the plugin is loaded (one of):
