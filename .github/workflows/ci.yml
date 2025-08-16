@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  PHP_EXTENSIONS: intl pdo_sqlite
+  PHP_EXTENSIONS: intl pdo_sqlite pcov
 
 jobs:
   test:
@@ -48,6 +48,14 @@ jobs:
       - name: Validate prefer-lowest
         if: matrix.prefer-lowest == 'prefer-lowest'
         run: vendor/bin/validate-prefer-lowest -m
+
+      - name: Upload coverage reports to Codecov
+        if: success() && matrix.php-version == '8.4'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: josbeir/cakephp-elastickit
+          files: ./coverage.xml          
 
   static-analysis:
     runs-on: ubuntu-latest
