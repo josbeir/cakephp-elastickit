@@ -2,6 +2,7 @@
 [![CI](https://github.com/josbeir/cakephp-elastikit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/josbeir/cakephp-elastikit/actions/workflows/ci.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat)](https://phpstan.org/)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-8892BF.svg)](https://php.net/)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/josbeir/cakephp-elastickit)](https://packagist.org/packages/josbeir/cakephp-elastickit)
 
 A lightweight CakePHP 5 plugin for working with Elasticsearch using the official PHP client.
 
