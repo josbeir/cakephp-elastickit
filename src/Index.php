@@ -137,7 +137,15 @@ class Index
 
         $builder = new Builder($client);
         if (is_callable($callback)) {
-            $callback($builder);
+            $result = $callback($builder);
+
+            if ($result instanceof Builder) {
+                $builder = $result;
+            } else {
+                throw new RuntimeException(
+                    'The callback must return an instance of \Spatie\ElasticsearchQueryBuilder\Builder.',
+                );
+            }
         }
 
         $response = $builder

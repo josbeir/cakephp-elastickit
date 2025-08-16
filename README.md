@@ -5,31 +5,31 @@
 
 A lightweight CakePHP 5 plugin for working with Elasticsearch using the official PHP client.
 
-This plugin provides a minimal integration: official Elasticsearch client wired into CakePHP with basic Index classes, ResultSet decoration, and Document entities. You handle persistence and validation.
+## Design Philosophy
 
-Note: This plugin does NOT implement RepositoryInterface, keeping the abstraction minimal and focused.
+This plugin provides minimal abstraction over the official Elasticsearch client. It handles connection management, index location, and result decoration while leaving persistence and validation to you.
 
-If you want validation and persistence, stop reading and go to [cakephp/elastic-search](https://github.com/cakephp/elastic-search).
+**Not included**: ORM-style persistence, validation, or RepositoryInterface implementation.
+
+**Want full ORM features?** Use [cakephp/elastic-search](https://github.com/cakephp/elastic-search) instead, which provides an ORM similar to CakePHP's database layer.
 
 ## Why this plugin?
 
-- Uses the official Elasticsearch PHP client (`elasticsearch/elasticsearch`) instead of Elastica.
-- Fewer surprises across Elasticsearch major releases; you mostly update dependencies when you upgrade.
-- Compose queries directly with the client API or with `spatie/elasticsearch-query-builder`.
-- Includes a few convenience methods (`get()`, `find()`) and result decoration via a `Document` entity.
-
-**Personal note**: I always felt that the official plugin was holding me back with its heavy abstractions and opinionated approach. While the official plugin does allow direct query building with Elastica's query builder, this plugin gives you the freedom to work directly with Elasticsearch's official client while still providing CakePHP integration conveniences.
+- **Official client**: Uses `elasticsearch/elasticsearch` instead of Elastica for better compatibility across ES versions
+- **Minimal abstraction**: Thin layer over the official client - no CakePHP ORM or persistence logic
+- **Flexible querying**: Use Spatie's query builder or the client API directly
+- **Upgrade-friendly**: Fewer breaking changes between Elasticsearch major releases
 
 ## How it differs from the original cakephp/elastic-search plugin
 
-The community plugin at cakephp/elastic-search (Elastica-based) offers an ORM-like experience (types, persisters, validation, and more). This plugin takes a different approach:
+**cakephp/elastic-search** (Elastica-based) provides a full ORM experience with types, persistence, and validation. **ElasticKit** takes a minimal approach:
 
-- Official client, no Elastica layer.
-- Very thin abstraction over the client; no ORM/persistence layer is provided.
-- Query building is your choice: use Spatie’s query builder or talk to the client directly.
-- Minimal coupling to Elasticsearch internals reduces breakage between major versions. Upgrades are mostly dependency bumps rather than refactors.
+- Uses the official Elasticsearch client (no Elastica)
+- Thin wrapper with no ORM/persistence layer
+- Choose your query method: Spatie's builder or direct client API
+- Fewer breaking changes between Elasticsearch versions
 
-If you need a full ORM-style persistence layer, the original plugin may suit you better. If you want a clean, stable way to use the official client inside CakePHP with a bit of extra ergonomics, this plugin is for you.
+Use the original plugin for ORM-style features. Use ElasticKit for clean access to the official client with CakePHP conveniences.
 
 ## Requirements
 
@@ -109,14 +109,14 @@ class TestItemsIndex extends Index
 }
 ```
 
-Document entities are resolved automatically from your index name. For an index named `test_items`, the plugin will try `App\Model\Document\TestItem`. If not present, it falls back to the generic `ElasticKit\Document`.
+Document entities are resolved automatically from your index name. For an index named `articles`, the plugin will try `App\Model\Document\Article`. If not present, it falls back to the generic `ElasticKit\Document`.
 
 ```php
 namespace App\Model\Document;
 
 use ElasticKit\Document;
 
-class TestItem extends Document
+class Article extends Document
 {
 	// Add accessors/mutators/virtuals as you like. You own persistence.
 }
@@ -137,9 +137,8 @@ use Spatie\ElasticsearchQueryBuilder\Builder;
 /** @var \App\Model\Index\TestItemsIndex $TestItems */
 $TestItems = $this->fetchIndex('TestItems');
 
-$results = $TestItems->find(function (Builder $q) {
-	$q->query(['match' => ['title' => 'cake']])
-	  ->size(25)
+$results = $TestItems->find(function (Builder $builder) {
+	return $builder->size(25)
 	  ->sort('_score', 'desc');
 });
 
@@ -150,19 +149,28 @@ foreach ($results as $doc) {
 ```
 
 ### 2) Directly via the official client
-
-Every unknown method call on your index instance proxies to the underlying `Elastic\Elasticsearch\Client`, so you can use the full API:
+Every unknown method call on your index instance proxies to the underlying `Elastic\Elasticsearch\Client`, so you can use the full API. Note that while `get()` is reserved by the Index class for fetching single documents, you can still access the client's `get()` method via `getClient()->get()`:
 
 ```php
+// Index's get() - returns a Document|null
+$doc = $TestItems->get('document_id');
+
+// Client's get() - returns raw Elasticsearch response
+$response = $TestItems->getClient()->get([
+	'index' => $TestItems->getIndexName(),
+	'id' => 'document_id'
+]);
+
 $response = $TestItems->search([
 	'index' => $TestItems->getIndexName(),
 	'body' => [
-		'query' => ['match_all' => (object)[]],
+		'query' => ['match_all' => ...],
 		'size' => 10,
 	],
 ]);
 
 // Convert as needed
+$resultset = $TestItems->resultSet($response);
 $array = $response->asArray();
 $object = $response->asObject();
 $ok = $response->asBool();
@@ -237,9 +245,7 @@ class TestItemsService
 	{
 		$TestItems = $this->fetchIndex('TestItems');
 
-		return $TestItems->find(function ($builder) use ($q) {
-			$builder->query(['match' => ['title' => $q]])->size(10);
-		});
+		return $TestItems->get(1234);
 	}
 }
 ```
@@ -273,7 +279,18 @@ Configure::write('DebugKit.panels', ['ElasticKit.Elasticsearch']);
 
 This is by design to keep the integration thin, explicit, and resilient to upstream changes.
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+### Development Setup
+
+1. Clone the repository
+2. Install dependencies: `composer install`
+3. Run tests: `composer test`
+
+Please make sure to update tests as appropriate and follow the existing code style.
+
 ## License
 
-MIT
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

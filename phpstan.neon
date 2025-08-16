@@ -8,10 +8,7 @@ parameters:
         - tests/bootstrap.php
     paths:
         - src/
-    excludePaths:
-        - */Console/*
     universalObjectCratesClasses:
-        - 'Cake\Datasource\EntityInterface'
         - 'Elastic\Elasticsearch\Response\Elasticsearch'
     ignoreErrors:
         -

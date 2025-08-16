@@ -14,6 +14,7 @@ use ElasticKit\Document;
 use ElasticKit\ResultSet;
 use ElasticKit\Test\Trait\ElasticClientTrait;
 use ElasticKit\TestApp\Model\Index\TestItemsIndex;
+use RuntimeException;
 use Spatie\ElasticsearchQueryBuilder\Builder;
 
 class IndexTest extends TestCase
@@ -81,13 +82,30 @@ class IndexTest extends TestCase
 
         // Check if closure has the right argument and is called.
         $called = false;
-        $resultset = $this->Index->find(function ($builder) use (&$called): void {
+        $resultset = $this->Index->find(function ($builder) use (&$called): Builder {
             $called = true;
             $this->assertInstanceOf(Builder::class, $builder);
+
+            return $builder;
         });
 
         $this->assertTrue($called, 'The finder closure was not invoked.');
         $this->assertInstanceOf(ResultSet::class, $resultset);
+    }
+
+    public function testInvalidBuilderResult(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'The callback must return an instance of \Spatie\ElasticsearchQueryBuilder\Builder.',
+        );
+
+        $response = $this->createElasticResponse('_search.json');
+        $this->mockClientGet(self::ES_HOST . '/test_items/_search', $response);
+
+        $this->Index->find(function ($builder) {
+            $this->assertInstanceOf(Builder::class, $builder);
+        });
     }
 
     public function testsetSettings(): void
