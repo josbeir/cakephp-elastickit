@@ -1,0 +1,35 @@
+{
+    "took": 1,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "skipped": 0,
+        "failed": 0
+    },
+    "hits": {
+        "total": {
+            "value": 2,
+            "relation": "gte"
+        },
+        "max_score": 1,
+        "hits": [
+            {
+                "_index": "test_items",
+                "_id": 1,
+                "_score": 1,
+                "_source": {
+                    "name": "hello"
+                }
+            },
+            {
+                "_index": "test_items",
+                "_id": 2,
+                "_score": 1,
+                "_source": {
+                    "name": "hello"
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "name": "josbeir/cakephp-elastickit",
+    "description": "A lightweight CakePHP 5 plugin for working with Elasticsearch using the official PHP client.",
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "elasticsearch",
+        "plugin"
+    ],
+    "require": {
+		"php": ">=8.1",
+        "cakephp/cakephp": "^5.0",
+        "elasticsearch/elasticsearch": "^9.0",
+        "spatie/elasticsearch-query-builder": "^3.8"
+    },
+    "require-dev": {
+        "cakephp/debug_kit": "^5.0",
+        "cakephp/plugin-installer": "^2.0.1",
+        "phpunit/phpunit": "^11.0 || ^12.0",
+        "phpstan/phpstan": "^2.1",
+        "cakephp/cakephp-codesniffer": "^5.2",
+        "cakedc/cakephp-phpstan": "^4.0"
+    },
+    "license": "MIT",
+   	"minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "ElasticKit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ElasticKit\\TestApp\\": "tests/testapp/",
+            "ElasticKit\\Test\\": "tests/TestCase/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jasper Smet"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
+        }
+    },
+    "scripts": {
+		"lowest": "validate-prefer-lowest",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
+		"stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:^2.0.0 && mv composer.backup composer.json",
+        "stan-tests": "phpstan analyse -c tests/phpstan.neon",
+        "cs-check": "phpcs --colors -p -s --extensions=php src/ tests/",
+        "cs-fix": "phpcbf --colors -p -s --extensions=php src/ tests/"
+    }
+}

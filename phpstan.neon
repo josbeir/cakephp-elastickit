@@ -1,0 +1,22 @@
+includes:
+    - vendor/cakedc/cakephp-phpstan/extension.neon
+parameters:
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    tmpDir: 'tmp/cache/phpstan'
+    bootstrapFiles:
+        - tests/bootstrap.php
+    paths:
+        - src/
+    excludePaths:
+        - */Console/*
+    universalObjectCratesClasses:
+        - 'Cake\Datasource\EntityInterface'
+        - 'Elastic\Elasticsearch\Response\Elasticsearch'
+    ignoreErrors:
+        -
+            identifier: missingType.generics
+        -
+            identifier: missingType.iterableValue
+        -
+            '#Call to an undefined method Elastic\\Elasticsearch\\Response\\Elasticsearch|Http\\Promise\\Promise#'

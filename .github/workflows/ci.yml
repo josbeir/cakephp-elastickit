@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PHP_EXTENSIONS: intl pdo_sqlite
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [8.1, 8.2, 8.3, 8.4]
+        prefer-lowest: ['']
+        include:
+          - php-version: '8.1'
+            prefer-lowest: 'prefer-lowest'
+
+    container:
+      image: thecodingmachine/php:${{ matrix.php-version }}-v5-cli
+      options: --user root
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          if ${{ matrix.prefer-lowest == 'prefer-lowest' }}; then
+            composer update --prefer-lowest --prefer-stable
+            composer require --dev dereuromark/composer-prefer-lowest:dev-master
+          else
+            composer install --prefer-dist --no-interaction --no-progress
+          fi
+
+      - name: Run PHPUnit
+        run: |
+          if [[ ${{ matrix.php-version }} == '8.4' ]]; then
+            vendor/bin/phpunit --coverage-clover=coverage.xml
+          else
+            vendor/bin/phpunit
+          fi
+
+      - name: Validate prefer-lowest
+        if: matrix.prefer-lowest == 'prefer-lowest'
+        run: vendor/bin/validate-prefer-lowest -m
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+
+    container:
+      image: thecodingmachine/php:8.4-v5-cli
+      options: --user root
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github
+
+      - name: Run PHPCS
+        run: vendor/bin/phpcs
