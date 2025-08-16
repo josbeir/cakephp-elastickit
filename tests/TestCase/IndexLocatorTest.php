@@ -24,7 +24,6 @@ class IndexLocatorTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->cleanupElasticClient();
         $this->getIndexLocator()->clear();
         parent::tearDown();
     }

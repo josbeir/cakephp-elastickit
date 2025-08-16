@@ -33,7 +33,6 @@ class IndexTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->cleanupElasticClient();
         unset($this->Index);
         parent::tearDown();
     }

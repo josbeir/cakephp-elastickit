@@ -21,12 +21,6 @@ class ConnectionTest extends TestCase
         parent::setUp();
     }
 
-    protected function tearDown(): void
-    {
-        $this->cleanupElasticClient();
-        parent::tearDown();
-    }
-
     public function testConstructor(): void
     {
         $connection = new Connection([

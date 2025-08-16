@@ -4,8 +4,6 @@ declare(strict_types=1);
 use Cake\Cache\Cache;
 use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
-use Cake\Datasource\ConnectionManager;
-use ElasticKit\Datasource\Connection;
 
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
@@ -52,8 +50,3 @@ Cache::setConfig($cache);
 
 Chronos::setTestNow(Chronos::now());
 session_id('cli');
-
-// Ensure default test connection is defined
-ConnectionManager::setConfig('elasticsearch', [
-    'className' => Connection::class,
-]);

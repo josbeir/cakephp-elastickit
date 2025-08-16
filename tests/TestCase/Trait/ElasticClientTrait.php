@@ -21,18 +21,10 @@ trait ElasticClientTrait
      */
     public function initializeElasticClient(): void
     {
+        ConnectionManager::drop('test_elasticsearch');
         ConnectionManager::setConfig('test_elasticsearch', [
             'className' => Connection::class,
         ]);
-    }
-
-    /**
-     * Cleanup the Elasticsearch client and connection.
-     */
-    public function cleanupElasticClient(): void
-    {
-        ConnectionManager::drop('test_elasticsearch');
-        $this->cleanupMockResponses();
     }
 
     /**
