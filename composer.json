@@ -49,7 +49,7 @@
         }
     },
     "scripts": {
-		"lowest": "validate-prefer-lowest",
+        "lowest": "validate-prefer-lowest",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
         "stan": "phpstan analyse",

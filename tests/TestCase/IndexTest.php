@@ -103,7 +103,7 @@ class IndexTest extends TestCase
         $response = $this->createElasticResponse('_search.json');
         $this->mockClientGet(self::ES_HOST . '/test_items/_search', $response);
 
-        $this->Index->find(function ($builder) {
+        $this->Index->find(function ($builder): void {
             $this->assertInstanceOf(Builder::class, $builder);
         });
     }

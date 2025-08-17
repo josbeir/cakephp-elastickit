@@ -8,7 +8,7 @@ use ElasticKit\Document;
 
 class DocumentTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $params = [
             'name' => 'Test Document',

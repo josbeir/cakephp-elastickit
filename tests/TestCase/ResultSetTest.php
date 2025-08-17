@@ -110,7 +110,7 @@ class ResultSetTest extends TestCase
         $this->assertSame($esResponse, $resultset->getResponse());
     }
 
-    public function testBulk()
+    public function testBulk(): void
     {
         $response = $this->createElasticResponse('_bulk.json');
         $this->mockClientPost(self::ES_HOST . '/test_items/_bulk', $response);
@@ -128,7 +128,7 @@ class ResultSetTest extends TestCase
         $this->assertEquals(1, $first->id);
     }
 
-    public function testBulkWithErrors()
+    public function testBulkWithErrors(): void
     {
         $response = $this->createElasticResponse('_bulk_errors.json');
         $this->mockClientPost(self::ES_HOST . '/test_items/_bulk', $response);

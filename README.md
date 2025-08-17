@@ -75,12 +75,32 @@ ConnectionManager::setConfig('elasticsearch', [
 	],
 	// Optional: any PSR-3 logger name registered with Cake\Log\Log or a LoggerInterface instance
 	'logger' => 'elasticsearch',
-
+	
     // All extra arguments are passed to \Elasticsearch\ClientBuilder
 ]);
 ```
 
 By default, indices resolve to the `elasticsearch` connection name. You can override the connection per index class via options if needed.
+
+
+### HTTP Client Configuration
+
+By default, the connection uses CakePHP's Http Client, which makes it easy to mock requests during testing. You can override this behavior using the `httpClient` option:
+
+```php
+use Cake\Datasource\ConnectionManager;
+use ElasticKit\Datasource\Connection;
+
+ConnectionManager::setConfig('elasticsearch', [
+	'className' => Connection::class,
+	'hosts' => ['http://localhost:9200'],
+	
+	// Optional: Use a different HTTP client
+	// Default: Uses CakePHP's Http Client (great for testing/mocking, hijacking the request/response)
+	// 'httpClient' => new YourPsr18HttpClient(), // Any PSR-18 compatible client
+	// 'httpClient' => new Elastic\Transport\Client\Curl, // Use the default cURL client from elasticsearch/elasticsearch
+]);
+```
 
 ## Defining an Index
 

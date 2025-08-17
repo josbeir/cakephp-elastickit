@@ -181,8 +181,6 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
 
     /**
      * Convert an object to an array.
-     *
-     * @param mixed $data
      */
     protected function objectToArray(mixed $data): array
     {

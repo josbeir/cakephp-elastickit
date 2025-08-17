@@ -6,10 +6,12 @@ namespace ElasticKit\Datasource;
 use Cake\Cache\Cache;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Datasource\ConnectionInterface;
+use Cake\Event\EventManager;
 use Cake\Http\Client;
 use Cake\Log\Log;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\ClientInterface;
+use ElasticKit\Event\HttpClientListener;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Psr\SimpleCache\CacheInterface;
@@ -72,6 +74,11 @@ class Connection implements ConnectionInterface
         $config = $this->getConfig();
 
         $config['httpClient'] = $this->getConfig('httpClient', new Client());
+
+        if ($config['httpClient'] instanceof Client) {
+            EventManager::instance()->on(new HttpClientListener());
+        }
+
         $config['logger'] = $this->getLogger();
 
         unset($config['name']);

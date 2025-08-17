@@ -62,7 +62,7 @@ class IndexLocatorTest extends TestCase
         $locator->get('TestIndex');
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $locator = new IndexLocator();
         $instance = new TestItemsIndex();
