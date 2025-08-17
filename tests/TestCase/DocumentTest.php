@@ -28,7 +28,7 @@ class DocumentTest extends TestCase
         $this->assertFalse($document->isDirty('name'));
     }
 
-    public function testDebuginfo()
+    public function testDebuginfo(): void
     {
         $params = [
             'name' => 'Test Document',

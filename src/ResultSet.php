@@ -102,7 +102,8 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
         $errors = [];
 
         $data = [];
-        $document_id = $score = null;
+        $document_id = null;
+        $score = null;
 
         // For normal search responses.
         if (!empty($row->_source)) {

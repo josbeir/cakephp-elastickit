@@ -61,8 +61,6 @@ class Document implements EntityInterface
 
     /**
      * Set the document ID.
-     *
-     * @param mixed $id
      */
     public function setDocumentId(mixed $id): self
     {
@@ -104,7 +102,7 @@ class Document implements EntityInterface
     {
         $fields = $this->entityDebugInfo();
         $fields['[reserved]'] = $this->reserved;
+
         return $fields;
     }
-
 }
