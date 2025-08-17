@@ -7,6 +7,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventDispatcherTrait;
 use Cake\Event\EventList;
 use Cake\Event\EventManager;
+use Cake\Http\Client\ClientEvent;
 use Cake\Log\Engine\FileLog;
 use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
@@ -137,7 +138,7 @@ class ConnectionTest extends TestCase
 
         /** @var \Cake\Http\Client\ClientEvent $event */
         $event = $eventList[0];
-        $this->assertInstanceOf(\Cake\Http\Client\ClientEvent::class, $event);
+        $this->assertInstanceOf(ClientEvent::class, $event);
 
         $request = $event->getRequest();
         $this->assertEquals(
