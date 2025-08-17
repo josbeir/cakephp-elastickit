@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ElasticKit\Test;
 
 use Cake\Datasource\ConnectionManager;
-use Cake\Event\EventDispatcherTrait;
 use Cake\Event\EventList;
 use Cake\Event\EventManager;
 use Cake\Http\Client\ClientEvent;
@@ -20,7 +19,6 @@ use Psr\SimpleCache\CacheInterface;
 class ConnectionTest extends TestCase
 {
     use ElasticClientTrait;
-    use EventDispatcherTrait;
 
     protected function setUp(): void
     {
@@ -134,7 +132,7 @@ class ConnectionTest extends TestCase
         $this->mockClientGet(self::ES_HOST . '/my_index/_doc/123', $response);
         $driver->get(['index' => 'my_index', 'id' => 123]);
 
-        $this->assertEventFired('HttpClient.beforeSend');
+        $this->assertTrue($eventList->hasEvent('HttpClient.beforeSend'));
 
         /** @var \Cake\Http\Client\ClientEvent $event */
         $event = $eventList[0];
