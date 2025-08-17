@@ -27,4 +27,31 @@ class DocumentTest extends TestCase
         $document->clean();
         $this->assertFalse($document->isDirty('name'));
     }
+
+    public function testDebuginfo()
+    {
+        $params = [
+            'name' => 'Test Document',
+            'description' => 'This is a test document.',
+        ];
+
+        $document = new Document($params);
+        $this->assertArrayHasKey('[reserved]', $document->__debugInfo());
+    }
+
+    public function testReservedGettersAndSetters(): void
+    {
+        $params = [
+            'name' => 'Test Document',
+            'description' => 'This is a test document.',
+        ];
+
+        $document = new Document($params);
+
+        $document->setDocumentId(1);
+        $this->assertEquals(1, $document->getDocumentId());
+
+        $document->setScore(1.1);
+        $this->assertEquals(1.1, $document->getScore());
+    }
 }

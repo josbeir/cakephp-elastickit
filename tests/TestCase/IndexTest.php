@@ -193,7 +193,7 @@ class IndexTest extends TestCase
 
         $response = $this->Index->get('1');
         $this->assertInstanceOf(Document::class, $response);
-        $this->assertEquals('1', $response->id);
+        $this->assertEquals('1', $response->getDocumentId());
         $this->assertEquals('Test Item', $response->name);
         $this->assertFalse($response->isDirty());
     }

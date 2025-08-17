@@ -13,7 +13,14 @@ use Cake\Datasource\EntityTrait;
  */
 class Document implements EntityInterface
 {
-    use EntityTrait;
+    use EntityTrait {
+        __debugInfo as entityDebugInfo;
+    }
+
+    protected array $reserved = [
+        'document_id' => null,
+        'score' => null,
+    ];
 
     /**
      * Constructor.
@@ -51,4 +58,53 @@ class Document implements EntityInterface
             ]);
         }
     }
+
+    /**
+     * Set the document ID.
+     *
+     * @param mixed $id
+     */
+    public function setDocumentId(mixed $id): self
+    {
+        $this->reserved['document_id'] = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set the document score.
+     */
+    public function setScore(?float $score): self
+    {
+        $this->reserved['score'] = $score;
+
+        return $this;
+    }
+
+    /**
+     * Get the document ID.
+     */
+    public function getDocumentId(): mixed
+    {
+        return $this->reserved['document_id'];
+    }
+
+    /**
+     * Get the document score.
+     */
+    public function getScore(): int|float|null
+    {
+        return $this->reserved['score'];
+    }
+
+    /**
+     * Get the source of the document.
+     */
+    public function __debugInfo(): array
+    {
+        $fields = $this->entityDebugInfo();
+        $fields['[reserved]'] = $this->reserved;
+        return $fields;
+    }
+
 }

@@ -101,19 +101,17 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
         $documentClass = $this->getDocumentClass();
         $errors = [];
 
-        $data = [
-            'id' => null,
-            'score' => null,
-        ];
+        $data = [];
+        $document_id = $score = null;
 
         // For normal search responses.
         if (!empty($row->_source)) {
-            $data['id'] = $row->_id ?? null;
-            $data['score'] = $row->_score ?? null;
-            $data += (array)$row->_source;
+            $document_id = $row->_id ?? null;
+            $score = $row->_score ?? null;
+            $data += $this->objectToArray($row->_source);
         // For batch responses.
         } elseif ($row?->index) {
-            $data['id'] = $row->index->_id ?? null;
+            $document_id = $row->index->_id ?? null;
 
             if (!empty($row->index->error)) {
                 $errors = $this->objectToArray($row->index->error);
@@ -127,9 +125,10 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
             'source' => $this->indexName,
         ]);
 
-        if ($errors !== []) {
-            $document->setErrors($errors);
-        }
+        $document
+            ->setErrors($errors)
+            ->setDocumentId($document_id)
+            ->setScore($score);
 
         return $document;
     }

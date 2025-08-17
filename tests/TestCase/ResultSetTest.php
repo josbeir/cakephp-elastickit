@@ -52,11 +52,12 @@ class ResultSetTest extends TestCase
         $this->assertEquals(2, $resultset->getHitsTotal());
         $this->assertEmpty($resultset->getAggregations());
 
+        /** @var \ElasticKit\Document $first */
         $first = $resultset->first();
         $this->assertInstanceOf(Document::class, $first);
         $this->assertEquals('hello', $first->name);
-        $this->assertEquals(1, $first->score);
-        $this->assertEquals(1, $first->id);
+        $this->assertEquals(1, $first->getScore());
+        $this->assertEquals(1, $first->getDocumentId());
     }
 
     public function testSingleResult(): void
@@ -74,10 +75,11 @@ class ResultSetTest extends TestCase
         $this->assertInstanceOf(ResultSetInterface::class, $resultset);
         $this->assertEquals(1, $resultset->count());
 
+        /** @var \ElasticKit\Document $first */
         $first = $resultset->first();
         $this->assertInstanceOf(Document::class, $first);
         $this->assertEquals('Test Item', $first->name);
-        $this->assertEquals(1, $first->id);
+        $this->assertEquals(1, $first->getDocumentId());
     }
 
     public function testWithAggregations(): void
@@ -122,10 +124,12 @@ class ResultSetTest extends TestCase
 
         $resultset = new ResultSet($esResponse, 'test_items');
         $this->assertFalse($resultset->hasErrors());
+
+        /** @var \ElasticKit\Document $first */
         $first = $resultset->first();
 
         $this->assertInstanceOf(Document::class, $first);
-        $this->assertEquals(1, $first->id);
+        $this->assertEquals(1, $first->getDocumentId());
     }
 
     public function testBulkWithErrors(): void
@@ -140,10 +144,12 @@ class ResultSetTest extends TestCase
 
         $resultset = new ResultSet($esResponse, 'test_items');
         $this->assertTrue($resultset->hasErrors());
+
+        /** @var \ElasticKit\Document $first */
         $first = $resultset->first();
 
         $this->assertInstanceOf(Document::class, $first);
-        $this->assertEquals(1, $first->id);
+        $this->assertEquals(1, $first->getDocumentId());
         $this->assertIsArray($first->getErrors());
 
         $errors = $first->getErrors();
