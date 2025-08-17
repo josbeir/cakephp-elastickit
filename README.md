@@ -134,6 +134,8 @@ class ArticlesIndex extends Index
 }
 ```
 
+## Document Entities
+
 Document entities are resolved automatically from your index name. For an index named `articles`, the plugin will try `App\Model\Document\Article`. If not present, it falls back to the generic `ElasticKit\Document`.
 
 ```php
@@ -145,6 +147,16 @@ class Article extends Document
 {
 	// Add accessors/mutators/virtuals as you like.
 }
+```
+
+Document entities follow CakePHP's EntityInterface with one key difference: the document ID and score are stored in a reserved property to avoid field name collisions.
+
+Access these properties using:
+
+```php
+$doc = $Articles->get('some-id');
+$id = $doc->getDocumentId();     // Gets the Elasticsearch document ID
+$score = $doc->getScore();       // Gets the search score (if from a search result)
 ```
 
 ## Querying
