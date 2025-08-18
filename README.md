@@ -5,7 +5,26 @@
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-8892BF.svg)](https://php.net/)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/josbeir/cakephp-elastickit)](https://packagist.org/packages/josbeir/cakephp-elastickit)
 
-A lightweight CakePHP 5 plugin for working with Elasticsearch using the official PHP client.
+A lightweight CakePHP 5 plugin for working with Elasticsearch using the [official PHP client](https://github.com/elastic/elasticsearch-php).
+
+## Table of Contents
+
+- [Design Philosophy](#design-philosophy)
+- [Why this plugin?](#why-this-plugin)
+- [How it differs from the original cakephp/elastic-search plugin](#how-it-differs-from-the-original-cakephpelastic-search-plugin)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Defining an Index](#defining-an-index)
+- [Document Entities](#document-entities)
+- [Querying](#querying)
+- [ResultSet API](#resultset-api)
+- [CLI: manage indices](#cli-manage-indices)
+- [Accessing indices from your code](#accessing-indices-from-your-code)
+- [Logging and debugging](#logging-and-debugging)
+- [What this plugin does NOT do](#what-this-plugin-does-not-do)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Design Philosophy
 
