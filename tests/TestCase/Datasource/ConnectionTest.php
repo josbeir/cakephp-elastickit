@@ -132,7 +132,7 @@ class ConnectionTest extends TestCase
         $this->mockClientGet(self::ES_HOST . '/my_index/_doc/123', $response);
         $driver->get(['index' => 'my_index', 'id' => 123]);
 
-        $this->assertTrue($eventList->hasEvent('HttpClient.beforeSend'));
+        $this->assertEventFired('HttpClient.beforeSend');
 
         /** @var \Cake\Http\Client\ClientEvent $event */
         $event = $eventList[0];
