@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ElasticKit\Test;
 
+use Cake\Core\Exception\CakeException;
 use Cake\TestSuite\TestCase;
 use ElasticKit\Exception\MissingIndexClassException;
 use ElasticKit\Locator\IndexLocator;
@@ -40,6 +41,14 @@ class IndexLocatorTest extends TestCase
         $this->expectException(MissingIndexClassException::class);
         $locator = new IndexLocator();
         $locator->get('NonExistentIndex');
+    }
+
+    public function testReconfigureException(): void
+    {
+        $this->expectException(CakeException::class);
+        $locator = new IndexLocator();
+        $locator->get(TestItemsIndex::class);
+        $locator->get(TestItemsIndex::class, ['other_key' => 'other_value']);
     }
 
     public function testSetIndex(): void

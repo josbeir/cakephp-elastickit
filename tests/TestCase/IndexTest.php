@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ElasticKit\Test;
 
+use Cake\Datasource\ConnectionManager;
 use Cake\Http\Client;
 use Cake\Http\TestSuite\HttpClientTrait;
 use Cake\TestSuite\TestCase;
@@ -38,9 +39,6 @@ class IndexTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * Test the initialization of the index.
-     */
     public function testInitialize(): void
     {
         $this->Index->initialize();
@@ -52,6 +50,21 @@ class IndexTest extends TestCase
         $connection = $this->Index->getConnection();
         $this->assertInstanceOf(Connection::class, $connection);
         $this->assertEquals('test_elasticsearch', $connection->getConfig('name'));
+    }
+
+    public function testInvalidConnection()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Elasticsearch connection is not configured properly.');
+
+        ConnectionManager::setConfig('not_elasticsearch', [
+            'url' => 'sqlite:///:memory',
+            'cacheMetadata' => false,
+        ]);
+
+        new TestItemsIndex([
+            'connection_name' => 'not_elasticsearch',
+        ]);
     }
 
     public function testGetIndexName(): void

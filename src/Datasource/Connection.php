@@ -15,7 +15,6 @@ use ElasticKit\Event\HttpClientListener;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Psr\SimpleCache\CacheInterface;
-use RuntimeException;
 
 class Connection implements ConnectionInterface
 {
@@ -105,7 +104,8 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * @inheritDoc
+     * Get a cacher.
+     * Please not that this is currently not used.
      */
     public function getCacher(): CacheInterface
     {
@@ -113,17 +113,7 @@ class Connection implements ConnectionInterface
             return $this->cacher;
         }
 
-        $configName = $this->getConfig('cacheMetadata', '_cake_model_');
-        if (!is_string($configName)) {
-            $configName = '_cake_model_';
-        }
-
-        if (!class_exists(Cache::class)) {
-            throw new RuntimeException(
-                'To use caching you must either set a cacher using Connection::setCacher()' .
-                ' or require the cakephp/cache package in your composer config.',
-            );
-        }
+        $configName = $this->getConfig('cacheEngine', '_cake_model_');
 
         return $this->cacher = Cache::pool($configName);
     }
