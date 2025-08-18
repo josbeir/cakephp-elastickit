@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ElasticKit\TestApp\Model\Index;
+namespace TestApp\Model\Index;
 
 use ElasticKit\Index;
 

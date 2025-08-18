@@ -27,7 +27,7 @@ require PLUGIN_ROOT . '/vendor/autoload.php';
 require CORE_PATH . 'config/bootstrap.php';
 
 Configure::write('App', [
-    'namespace' => 'CakeUid\Test\App',
+    'namespace' => 'TestApp',
     'encoding' => 'UTF-8',
     'fullBaseUrl' => 'http://localhost',
 ]);

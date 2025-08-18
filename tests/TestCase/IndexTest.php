@@ -14,9 +14,9 @@ use ElasticKit\Datasource\Connection;
 use ElasticKit\Document;
 use ElasticKit\ResultSet;
 use ElasticKit\Test\Trait\ElasticClientTrait;
-use ElasticKit\TestApp\Model\Index\TestItemsIndex;
 use RuntimeException;
 use Spatie\ElasticsearchQueryBuilder\Builder;
+use TestApp\Model\Index\TestItemsIndex;
 
 class IndexTest extends TestCase
 {

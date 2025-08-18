@@ -50,6 +50,7 @@ class Index
     public function __construct(array $config = [])
     {
         $this->setConfig($config);
+        $this->initialize();
 
         $connectionName = $this->getConfig('connection_name', static::defaultConnectionName());
         $connection = ConnectionManager::get($connectionName);
@@ -58,7 +59,6 @@ class Index
         }
 
         $this->Connection = $connection;
-        $this->initialize();
     }
 
     /**

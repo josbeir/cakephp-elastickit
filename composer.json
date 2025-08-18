@@ -32,7 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "ElasticKit\\TestApp\\": "tests/testapp/",
+            "TestApp\\": "tests/test_app/src/",
             "ElasticKit\\Test\\": "tests/TestCase/"
         }
     },

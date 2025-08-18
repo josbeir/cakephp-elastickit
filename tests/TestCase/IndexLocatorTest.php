@@ -9,7 +9,7 @@ use ElasticKit\Exception\MissingIndexClassException;
 use ElasticKit\Locator\IndexLocator;
 use ElasticKit\Locator\IndexLocatorAwareTrait;
 use ElasticKit\Test\Trait\ElasticClientTrait;
-use ElasticKit\TestApp\Model\Index\TestItemsIndex;
+use TestApp\Model\Index\TestItemsIndex;
 
 class IndexLocatorTest extends TestCase
 {

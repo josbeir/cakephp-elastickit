@@ -9,8 +9,8 @@ use Cake\TestSuite\TestCase;
 use ElasticKit\Document;
 use ElasticKit\ResultSet;
 use ElasticKit\Test\Trait\ElasticClientTrait;
-use ElasticKit\TestApp\Model\Document\Custom;
-use ElasticKit\TestApp\Model\Index\TestItemsIndex;
+use TestApp\Model\Document\Custom;
+use TestApp\Model\Index\TestItemsIndex;
 
 class ResultSetTest extends TestCase
 {

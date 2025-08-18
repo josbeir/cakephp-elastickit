@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ElasticKit\TestApp\Model\Document;
+namespace TestApp\Model\Document;
 
 use ElasticKit\Document;
 
