@@ -52,7 +52,7 @@ class IndexTest extends TestCase
         $this->assertEquals('test_elasticsearch', $connection->getConfig('name'));
     }
 
-    public function testInvalidConnection()
+    public function testInvalidConnection(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Elasticsearch connection is not configured properly.');

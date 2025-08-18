@@ -9,6 +9,7 @@ use Cake\TestSuite\TestCase;
 use ElasticKit\Document;
 use ElasticKit\ResultSet;
 use ElasticKit\Test\Trait\ElasticClientTrait;
+use ElasticKit\TestApp\Model\Document\Custom;
 use ElasticKit\TestApp\Model\Index\TestItemsIndex;
 
 class ResultSetTest extends TestCase
@@ -155,5 +156,21 @@ class ResultSetTest extends TestCase
         $errors = $first->getErrors();
         $this->assertArrayHasKey('type', $errors[0]);
         $this->assertEquals('document_parsing_exception', $errors[0]['type']);
+    }
+
+    public function testSetDocumentClass(): void
+    {
+        $response = $this->createElasticResponse('_search.json');
+        $this->mockClientGet(self::ES_HOST . '/test_items/_search', $response);
+
+        $esResponse = $this->Index->search([
+            'index' => 'test_items',
+        ]);
+
+        $resultset = new ResultSet($esResponse, 'test_items');
+        $resultset->setDocumentClass(Custom::class);
+
+        $first = $resultset->first();
+        $this->assertInstanceOf(Custom::class, $first);
     }
 }
