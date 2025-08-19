@@ -173,4 +173,23 @@ class ResultSetTest extends TestCase
         $first = $resultset->first();
         $this->assertInstanceOf(Custom::class, $first);
     }
+
+    public function testDebugInfo(): void
+    {
+        $response = $this->createElasticResponse('_search.json');
+        $this->mockClientGet(self::ES_HOST . '/test_items/_search', $response);
+
+        $esResponse = $this->Index->search([
+            'index' => 'test_items',
+        ]);
+
+        $resultset = new ResultSet($esResponse, 'test_items');
+
+        $debuginfo = $resultset->__debugInfo();
+        $this->assertIsArray($debuginfo);
+        $this->assertArrayHasKey('indexName', $debuginfo);
+        $this->assertArrayHasKey('documentClass', $debuginfo);
+        $this->assertArrayHasKey('response', $debuginfo);
+        $this->assertIsArray($debuginfo['response']);
+    }
 }

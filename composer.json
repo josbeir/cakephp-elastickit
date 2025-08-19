@@ -51,7 +51,7 @@
     "scripts": {
         "lowest": "validate-prefer-lowest",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
+        "test-coverage": "export XDEBUG_MODE=coverage; phpunit --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
         "stan": "phpstan analyse",
         "cs-check": "phpcs --colors -p -s",
         "cs-fix": "phpcbf --colors -p -s",

@@ -128,13 +128,6 @@ class Index
     public function find(?Closure $callback = null): ResultSet
     {
         $client = $this->getClient();
-        if (!class_exists(Builder::class)) {
-            throw new RuntimeException(
-                'The spatie/elasticsearch-query-builder package is required.
-                Please install it via Composer.',
-            );
-        }
-
         $builder = new Builder($client);
         if (is_callable($callback)) {
             $result = $callback($builder);
