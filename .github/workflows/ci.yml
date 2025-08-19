@@ -81,3 +81,6 @@ jobs:
 
       - name: Run PHPCS
         run: vendor/bin/phpcs
+
+      - name: Run Rector
+        run: vendor/bin/rector process --dry-run
