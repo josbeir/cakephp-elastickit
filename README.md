@@ -4,6 +4,7 @@
 [![codecov](https://codecov.io/github/josbeir/cakephp-elastickit/graph/badge.svg?token=4VGWJQTWH5)](https://codecov.io/github/josbeir/cakephp-elastickit)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-8892BF.svg)](https://php.net/)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/josbeir/cakephp-elastickit)](https://packagist.org/packages/josbeir/cakephp-elastickit)
+![GitHub License](https://img.shields.io/github/license/josbeir/cakephp-elastickit)
 
 A lightweight CakePHP 5 plugin for working with Elasticsearch using the [official PHP client](https://github.com/elastic/elasticsearch-php).
 
@@ -249,6 +250,7 @@ The `ResultSet` exposes helpers like:
 - `getAggregations(): ?array` — Aggregation results from the response (if present).
 - `hasErrors(): bool` — Indicates whether the underlying response reported errors (useful for bulk responses).
 - `getResponse(): ResponseInterface` — Access the raw Elasticsearch response object.
+- `getBuilder(): Builder` — The builder instance.
 
 Iteration
 

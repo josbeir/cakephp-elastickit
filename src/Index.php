@@ -121,16 +121,25 @@ class Index
     /**
      * Build and execute a query using the spatie/elasticsearch-query-builder package.
      *
-     * @param \Closure|null $callback A callback function to customize the query builder.
+     * @param \Spatie\ElasticsearchQueryBuilder\Builder|\Closure|null $conditions
+     *  - a callback function to customize the query builder. The callback argument contains a Builder instance.
+     *  - a a `\Spatie\ElasticsearchQueryBuilder\Builder` instance.
      * @see https://github.com/spatie/ElasticKit-query-builder
      * @throws \RuntimeException If the ElasticKit client is not available.
      */
-    public function find(?Closure $callback = null): ResultSet
+    public function find(Builder|Closure|null $conditions = null): ResultSet
     {
         $client = $this->getClient();
-        $builder = new Builder($client);
-        if (is_callable($callback)) {
-            $result = $callback($builder);
+
+        if ($conditions instanceof Builder) {
+            $builder = $conditions;
+            $conditions = null;
+        } else {
+            $builder = new Builder($client);
+        }
+
+        if (is_callable($conditions)) {
+            $result = $conditions($builder);
 
             if ($result instanceof Builder) {
                 $builder = $result;
@@ -145,7 +154,7 @@ class Index
             ->index($this->getIndexName())
             ->search();
 
-        return $this->resultSet($response);
+        return $this->resultSet($response, $builder);
     }
 
     /**
@@ -266,12 +275,14 @@ class Index
      * Return a decorated ResultSet instance.
      *
      * @param \Elastic\Elasticsearch\Response\Elasticsearch $response The Elasticsearch response.
+     * @param \Spatie\ElasticsearchQueryBuilder\Builder|null $builder The query builder instance.
      */
-    public function resultSet(Elasticsearch $response): ResultSet
+    public function resultSet(Elasticsearch $response, ?Builder $builder = null): ResultSet
     {
         return new ResultSet(
             $response,
             $this->getIndexName(),
+            $builder,
         );
     }
 }

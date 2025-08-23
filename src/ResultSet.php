@@ -10,6 +10,7 @@ use Cake\Datasource\ResultSetInterface;
 use Cake\Utility\Inflector;
 use Elastic\Elasticsearch\Response\Elasticsearch;
 use IteratorIterator;
+use Spatie\ElasticsearchQueryBuilder\Builder;
 
 /**
  * @package ElasticKit
@@ -29,6 +30,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
     public function __construct(
         protected Elasticsearch $response,
         protected string $indexName,
+        protected ?Builder $builder = null,
     ) {
         $items = new ArrayIterator($this->getResults());
         parent::__construct($items);
@@ -172,6 +174,14 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
     }
 
     /**
+     * Get the query builder instance.
+     */
+    public function getBuilder(): ?Builder
+    {
+        return $this->builder;
+    }
+
+    /**
      * Get the original Elasticsearch response.
      */
     public function getResponse(): Elasticsearch
@@ -212,6 +222,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
             'indexName' => $this->indexName,
             'documentClass' => $this->documentClass,
             'response' => $this->response->asArray(),
+            'builder' => $this->builder,
         ];
     }
 }

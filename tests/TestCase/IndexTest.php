@@ -104,6 +104,12 @@ class IndexTest extends TestCase
 
         $this->assertTrue($called, 'The finder closure was not invoked.');
         $this->assertInstanceOf(ResultSet::class, $resultset);
+        $this->assertInstanceOf(Builder::class, $resultset->getBuilder());
+
+        // Custom builder instance.
+        $builder = new Builder($this->Index->getClient());
+        $resultset = $this->Index->find($builder);
+        $this->assertEquals($builder, $resultset->getBuilder());
     }
 
     public function testInvalidBuilderResult(): void
