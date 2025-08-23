@@ -85,6 +85,12 @@ class IndexTest extends TestCase
         $this->assertInstanceOf(ClientInterface::class, $client);
     }
 
+    public function testCreateBuilder(): void
+    {
+        $builder = $this->Index->createBuilder();
+        $this->assertInstanceOf(Builder::class, $builder);
+    }
+
     public function testFind(): void
     {
         $response = $this->createElasticResponse('_search.json');
@@ -107,7 +113,7 @@ class IndexTest extends TestCase
         $this->assertInstanceOf(Builder::class, $resultset->getBuilder());
 
         // Custom builder instance.
-        $builder = new Builder($this->Index->getClient());
+        $builder = $this->Index->createBuilder();
         $resultset = $this->Index->find($builder);
         $this->assertEquals($builder, $resultset->getBuilder());
     }

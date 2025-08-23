@@ -194,11 +194,18 @@ use Spatie\ElasticsearchQueryBuilder\Queries\MatchQuery;
 
 $Articles = $this->fetchIndex('Articles');
 
+// Using a closure
 $results = $Articles->find(function (Builder $builder) {
 	return $builder
 		->addQuery(MatchQuery::create('name', 'elastickit', fuzziness: 3))
 		->addAggregation(MaxAggregation::create('score'))
 });
+
+// Or by creating a builder instance and passing it to the find() function.
+$query = $Articles->createBuilder()
+	->addQuery(MatchQuery::create('name', 'elastickit', fuzziness: 3));
+
+$results = $Articles->find($query);
 ```
 
 ### 2) Directly via the official client

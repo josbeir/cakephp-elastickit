@@ -119,6 +119,14 @@ class Index
     }
 
     /**
+     * Get a new Builder instance for building queries.
+     */
+    public function createBuilder(): Builder
+    {
+        return new Builder($this->getClient());
+    }
+
+    /**
      * Build and execute a query using the spatie/elasticsearch-query-builder package.
      *
      * @param \Spatie\ElasticsearchQueryBuilder\Builder|\Closure|null $conditions
@@ -127,19 +135,16 @@ class Index
      * @see https://github.com/spatie/ElasticKit-query-builder
      * @throws \RuntimeException If the ElasticKit client is not available.
      */
-    public function find(Builder|Closure|null $conditions = null): ResultSet
+    public function find(Builder|Closure|null $query = null): ResultSet
     {
-        $client = $this->getClient();
-
-        if ($conditions instanceof Builder) {
-            $builder = $conditions;
-            $conditions = null;
+        if ($query instanceof Builder) {
+            $builder = $query;
         } else {
-            $builder = new Builder($client);
+            $builder = $this->createBuilder();
         }
 
-        if (is_callable($conditions)) {
-            $result = $conditions($builder);
+        if (is_callable($query)) {
+            $result = $query($builder);
 
             if ($result instanceof Builder) {
                 $builder = $result;
