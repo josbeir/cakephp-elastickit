@@ -129,7 +129,7 @@ class Index
     /**
      * Build and execute a query using the spatie/elasticsearch-query-builder package.
      *
-     * @param \Spatie\ElasticsearchQueryBuilder\Builder|\Closure|null $conditions
+     * @param \Spatie\ElasticsearchQueryBuilder\Builder|\Closure|null $query The query to execute. This can be:
      *  - a callback function to customize the query builder. The callback argument contains a Builder instance.
      *  - a a `\Spatie\ElasticsearchQueryBuilder\Builder` instance.
      * @see https://github.com/spatie/ElasticKit-query-builder
