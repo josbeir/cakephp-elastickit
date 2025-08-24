@@ -9,6 +9,11 @@ use ElasticKit\Datasource\Connection;
 use ElasticKit\Log\DebugKitLog;
 use Psr\Log\LoggerInterface;
 
+/**
+ * ElasticsearchPanel class for displaying Elasticsearch requests in DebugKit.
+ *
+ * @package ElasticKit
+ */
 class ElasticsearchPanel extends DebugPanel
 {
     public string $plugin = 'ElasticKit';

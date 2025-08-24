@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \DebugKit\View\AjaxView $this
+ * @package ElasticKit
  */
 //phpcs:disable
 ?>

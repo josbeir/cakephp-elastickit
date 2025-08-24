@@ -8,7 +8,7 @@ use Cake\Datasource\EntityTrait;
 /**
  * Base class for ElasticKit documents.
  *
- * @mixin \Elastic\Elasticsearch\Client
+ * @package ElasticKit
  */
 class Document implements DocumentInterface
 {

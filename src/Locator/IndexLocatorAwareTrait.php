@@ -5,6 +5,13 @@ namespace ElasticKit\Locator;
 
 use ElasticKit\Index;
 
+/**
+ * Trait IndexLocatorAwareTrait
+ *
+ * Provides methods to manage and access the IndexLocator instance.
+ *
+ * @package ElasticKit
+ */
 trait IndexLocatorAwareTrait
 {
     protected ?IndexLocatorInterface $indexLocator = null;

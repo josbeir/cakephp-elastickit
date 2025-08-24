@@ -15,6 +15,8 @@ use function Cake\Core\pluginSplit;
 
 /**
  * ElasticIndex command.
+ *
+ * @package ElasticKit
  */
 class IndexCommand extends Command
 {

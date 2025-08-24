@@ -197,7 +197,7 @@ $Articles = $this->fetchIndex('Articles');
 // Using a closure
 $results = $Articles->find(function (Builder $builder) {
 	return $builder
-		->addQuery(MatchQuery::create('name', 'elastickit', fuzziness: 3))
+		->addQuery(MatchQuery::create('name', 'elastickit', fuzziness: 'AUTO'))
 		->addAggregation(MaxAggregation::create('score'))
 });
 

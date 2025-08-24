@@ -16,6 +16,8 @@ use function Cake\Core\pluginSplit;
  *
  * This class is responsible for managing the lifecycle of index instances.
  * It allows for retrieving, setting, checking existence, and removing index instances.
+ *
+ * @package ElasticKit
  */
 class IndexLocator implements IndexLocatorInterface
 {

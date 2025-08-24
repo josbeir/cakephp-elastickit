@@ -16,6 +16,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Psr\SimpleCache\CacheInterface;
 
+/**
+ * Connection class for ElasticKit.
+ *
+ * @package ElasticKit
+ */
 class Connection implements ConnectionInterface
 {
     use InstanceConfigTrait;

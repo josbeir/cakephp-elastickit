@@ -19,6 +19,7 @@ use function Cake\Core\namespaceSplit;
 /**
  * Base class for ElasticKit indices.
  *
+ * @package ElasticKit
  * @mixin \Elastic\Elasticsearch\Client
  */
 class Index

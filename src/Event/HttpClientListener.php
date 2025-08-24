@@ -11,7 +11,7 @@ use Elastic\Elasticsearch\Client;
  * This works around an issue where the Content-Type
  * compatibility header is not set correctly when using the Cake HTTP client.
  *
- * @package ElasticKit\Event
+ * @package ElasticKit
  */
 class HttpClientListener implements EventListenerInterface
 {

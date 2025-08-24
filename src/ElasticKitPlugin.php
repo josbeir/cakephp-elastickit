@@ -9,6 +9,8 @@ use ElasticKit\Command\IndexCommand;
 
 /**
  * Plugin for ElasticKit
+ *
+ * @package ElasticKit
  */
 class ElasticKitPlugin extends BasePlugin
 {

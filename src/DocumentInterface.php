@@ -5,6 +5,11 @@ namespace ElasticKit;
 
 use Cake\Datasource\EntityInterface;
 
+/**
+ * Document interface for ElasticKit
+ *
+ * @package ElasticKit
+ */
 interface DocumentInterface extends EntityInterface
 {
     /**

@@ -13,6 +13,8 @@ use IteratorIterator;
 use Spatie\ElasticsearchQueryBuilder\Builder;
 
 /**
+ * Result set for ElasticKit.
+ *
  * @package ElasticKit
  */
 class ResultSet extends IteratorIterator implements ResultSetInterface

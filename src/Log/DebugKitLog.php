@@ -7,6 +7,11 @@ use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use Stringable;
 
+/**
+ * DebugKitLog class for logging requests in DebugKit.
+ *
+ * @package ElasticKit
+ */
 class DebugKitLog extends AbstractLogger
 {
     protected array $requests = [];

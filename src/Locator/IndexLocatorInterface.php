@@ -20,6 +20,8 @@ use ElasticKit\Index;
 
 /**
  * Registries for repository objects should implement this interface.
+ *
+ * @package ElasticKit
  */
 interface IndexLocatorInterface
 {
