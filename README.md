@@ -312,6 +312,24 @@ class ArticlesService
 }
 ```
 
+### PHPstan notes
+
+When using `IndexLocatorAwareTrait::fetchIndex()`, PHPStan will complain about `assign.propertyType` when assigning the result to a typed property. This happens because PHPStan can't infer the specific index class being returned.
+
+To resolve this while maintaining similarity with `IndexLocatorAwareTrait::fetchTable()`, add the following to your `phpstan.neon` configuration (requires `cakedc/cakephp-phpstan`):
+
+```neon
+# Support IndexLocatorAwareTrait
+services:
+	-
+		factory: CakeDC\PHPStan\Type\BaseTraitExpressionTypeResolverExtension(ElasticKit\Locator\IndexLocatorAwareTrait, fetchIndex, %s\Model\Index\%sIndex)
+		tags:
+			- phpstan.broker.expressionTypeResolverExtension
+```
+
+This extension teaches PHPStan to recognize that `$this->fetchIndex('Articles')` returns an `ArticlesIndex` instance, eliminating type errors.
+
+
 ## Logging and debugging
 
 - Pass a PSR-3 logger (or the name of a Cake log engine) to the connection config via `logger` to capture client requests.
