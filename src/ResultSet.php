@@ -97,7 +97,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
     /**
      * Get the current document.
      */
-    public function current(): Document
+    public function current(): DocumentInterface
     {
         $row = parent::current();
         $documentClass = $this->getDocumentClass();
@@ -121,7 +121,7 @@ class ResultSet extends IteratorIterator implements ResultSetInterface
             }
         }
 
-        /** @var \ElasticKit\Document $document */
+        /** @var \ElasticKit\DocumentInterface $document */
         $document = new $documentClass($data, [
             'markClean' => true,
             'useSetters' => false,

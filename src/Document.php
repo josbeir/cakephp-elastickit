@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace ElasticKit;
 
-use Cake\Datasource\EntityInterface;
 use Cake\Datasource\EntityTrait;
 
 /**
@@ -11,7 +10,7 @@ use Cake\Datasource\EntityTrait;
  *
  * @mixin \Elastic\Elasticsearch\Client
  */
-class Document implements EntityInterface
+class Document implements DocumentInterface
 {
     use EntityTrait {
         __debugInfo as entityDebugInfo;

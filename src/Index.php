@@ -137,14 +137,13 @@ class Index
      */
     public function find(Builder|Closure|null $query = null): ResultSet
     {
+        $builder = null;
         if ($query instanceof Builder) {
             $builder = $query;
-        } else {
-            $builder = $this->createBuilder();
         }
 
         if (is_callable($query)) {
-            $result = $query($builder);
+            $result = $query($this->createBuilder());
 
             if ($result instanceof Builder) {
                 $builder = $result;
@@ -153,6 +152,10 @@ class Index
                     'The callback must return an instance of \Spatie\ElasticsearchQueryBuilder\Builder.',
                 );
             }
+        }
+
+        if (!$builder instanceof Builder) {
+            $builder = $this->createBuilder();
         }
 
         $response = $builder
